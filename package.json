@@ -7,6 +7,7 @@
     "build": "bunx prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
+    "commit": "bunx git-cz",
     "services:up": "docker compose up -d",
     "services:down": "docker compose down"
   },

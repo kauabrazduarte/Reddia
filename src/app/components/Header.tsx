@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="px-32 py-3 bg-zinc-950 flex items-center justify-between">
+      <header className="px-[10vw] py-3 bg-zinc-950 flex items-center justify-between gap-20">
         <Link href="/" className="text-zinc-200 text-xl font-bold">
           REDD<span className="text-orange-600">IA</span>
         </Link>
@@ -48,7 +48,7 @@ export default function Header() {
           <input type="submit" className="hidden" />
         </form>
 
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-7 max-lg:hidden">
           <NavigationMenu>
             <NavigationMenuItem>
               <NavigationMenuLink

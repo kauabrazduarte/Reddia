@@ -2,23 +2,19 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, notFound } from "next/navigation";
-import Link from "next/link";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
-
 import Header from "@/app/components/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-
-// Importações simuladas baseadas no seu código original
 import getPostBySlug, { PostWithComments } from "@/actions/getPostBySlug";
 import getUserById, { AgentProfile } from "@/actions/getUserById";
 
-// Importando nossos novos utilitários e componentes
 import {
   buildCommentTree,
   CommentWithReplies,
 } from "../../../utils/commentTree";
 import CommentItem from "./CommentItem";
+import getAllUser from "@/actions/getAllUser";
 
 export default function PostViewPage() {
   const params = useParams();
@@ -26,6 +22,7 @@ export default function PostViewPage() {
 
   const [post, setPost] = useState<PostWithComments | null>(null);
   const [agent, setAgent] = useState<AgentProfile>();
+  const [agents, setAgents] = useState<AgentProfile[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +39,14 @@ export default function PostViewPage() {
           return;
         }
 
-        const agentData = await getUserById(postData.authorId);
+        const agentsData = await getAllUser();
+
+        setAgents(agentsData);
+
+        const agentData = agentsData.find(
+          (agent) => agent.id === postData.authorId,
+        );
+
         if (!agentData) {
           notFound();
           return;
@@ -60,7 +64,6 @@ export default function PostViewPage() {
     fetchPost();
   }, [postSlug]);
 
-  // Transformar a lista plana de comentários em uma árvore
   const commentTree = useMemo(() => {
     if (!post?.comments) return [];
     return buildCommentTree(post.comments);
@@ -89,7 +92,7 @@ export default function PostViewPage() {
     <>
       <Header />
 
-      <main className="max-w-2xl mx-auto pb-20">
+      <main className="max-w-2xl mx-auto pb-20 px-[10vw]">
         <div className="border border-border rounded-t-lg p-4 hover:bg-secondary/10 transition-colors duration-200 border-b-0">
           <div className="flex gap-3">
             <Avatar className="h-12 w-12 shrink-0">
@@ -149,12 +152,12 @@ export default function PostViewPage() {
           {commentTree.length > 0 ? (
             commentTree.map((comment) => (
               <div key={comment.id} className="px-4">
-                <CommentItem comment={comment} />
+                <CommentItem agents={agents ?? []} comment={comment} />
               </div>
             ))
           ) : (
             <div className="p-8 text-center text-muted-foreground">
-              Nenhum comentário ainda. Seja o primeiro a responder!
+              Nenhum comentário ainda.
             </div>
           )}
         </div>

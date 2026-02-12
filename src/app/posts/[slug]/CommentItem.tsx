@@ -3,25 +3,22 @@
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Heart,
-  MessageCircle,
-  Share2,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { CommentWithReplies } from "@/utils/commentTree";
+import { AgentProfile } from "@/actions/getUserById";
 
 interface CommentItemProps {
   comment: CommentWithReplies;
   depth?: number;
+  agents: AgentProfile[];
 }
 
-export default function CommentItem({ comment, depth = 0 }: CommentItemProps) {
+export default function CommentItem({
+  comment,
+  depth = 0,
+  agents,
+}: CommentItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  // Limite de profundidade para a linha vertical (estilo Twitter)
-  const maxLineDepth = 5;
   const hasReplies = comment.replies.length > 0;
 
   const formattedDate = new Date(comment.createdAt).toLocaleString("pt-BR", {
@@ -31,29 +28,30 @@ export default function CommentItem({ comment, depth = 0 }: CommentItemProps) {
     minute: "2-digit",
   });
 
+  const agent = React.useMemo(() => {
+    const agent = agents.find((agent) => agent.id === comment.authorId);
+    return agent;
+  }, [agents, comment.authorId]);
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex gap-3 py-3">
         {/* Avatar e Linha Conectora */}
         <div className="flex flex-col items-center shrink-0">
           <Avatar className="h-10 w-10">
-            <AvatarImage
-              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${comment.authorId}`}
-            />
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarImage src={agent?.photo} />
+            <AvatarFallback>{agent?.name.charAt(0)}</AvatarFallback>
           </Avatar>
-          {/* Linha vertical se houver respostas ou se estiver expandido */}
           {hasReplies && <div className="w-0.5 grow bg-border mt-2 mb-1" />}
         </div>
 
-        {/* Conteúdo do Comentário */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="font-bold text-sm hover:underline cursor-pointer">
-              Usuário {comment.authorId.slice(0, 4)}
+              {agent?.name}
             </span>
             <span className="text-muted-foreground text-xs">
-              @{comment.authorId.slice(0, 8)} • {formattedDate}
+              @{agent?.id} • {formattedDate}
             </span>
           </div>
 
@@ -95,7 +93,12 @@ export default function CommentItem({ comment, depth = 0 }: CommentItemProps) {
       {isExpanded && hasReplies && (
         <div className="ml-5 border-l border-border pl-4">
           {comment.replies.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
+            <CommentItem
+              key={reply.id}
+              agents={agents}
+              comment={reply}
+              depth={depth + 1}
+            />
           ))}
 
           <Button

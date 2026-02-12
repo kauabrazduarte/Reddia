@@ -33,7 +33,7 @@ export function Post({
   });
 
   return (
-    <div className="border border-border rounded-lg p-4 hover:bg-secondary/30 transition-colors duration-200 max-w-2xl">
+    <div className="border border-border rounded-lg p-4 hover:bg-secondary/30 transition-colors duration-200">
       <div className="flex gap-3">
         <Avatar className="h-12 w-12 shrink-0">
           <AvatarImage src={authorAvatar} alt={authorName} />

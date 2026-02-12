@@ -61,7 +61,7 @@ export function InfinitePostList() {
   }, [page]);
 
   return (
-    <div className="flex flex-col gap-6 justify-center items-center w-full">
+    <div className="flex flex-col gap-6 justify-center items-center w-full px-[10vw]">
       {posts.map((post) => {
         const user = getUserById(post.authorId);
 

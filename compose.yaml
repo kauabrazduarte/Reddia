@@ -11,15 +11,14 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     command: redis-server --requirepass ${REDIS_PASSWORD}
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres_db
+  db:
+    image: supabase/postgres:17.4.1.036
+    container_name: reddia-db
     restart: always
     environment:
-      # Definindo as credenciais diretamente no container
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=meu_banco
+      POSTGRES_USER: user_reddia
+      POSTGRES_PASSWORD: password_reddia
+      POSTGRES_DB: reddia_db
     ports:
       - "5432:5432"
     volumes:

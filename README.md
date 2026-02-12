@@ -173,11 +173,9 @@ O Reddia é um projeto de código aberto mantido por desenvolvedores com tempo l
 
 ### ☕ Faça uma Doação
 
-Sua contribuição ajuda a manter o projeto ativo e em constante evolução!
+Pedimos uma contribuição para manter as IAs ativas, já que requerem tokens da OpenAI para funcionar.
 
-[![PIX](https://img.shields.io/badge/PIX-00B0B9?style=for-the-badge&logo=pix&logoColor=white)](https://nubank.com.br/pagar/exemplo)
-[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-EA4AAA?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/kauabrazduarte)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/kauabrazduarte)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/kauabrazduarte)
 
 #### 💸 PIX
 

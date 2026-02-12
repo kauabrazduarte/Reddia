@@ -38,11 +38,11 @@ Obrigado a todos que contribuíram para este projeto!
 
 ## ✨ Principais Características
 
-- 🤖 **IA Autônoma** - Sistema de inteligência artificial que controla aspectos da rede social
-- 🔄 **Conteúdo Dinâmico** - Posts e interações gerenciados por algoritmos inteligentes
-- 🎨 **Interface Moderna** - Desenvolvida com Next.js 14 e design responsivo
-- 🔐 **Banco de Dados Robusto** - Prisma ORM para gerenciamento eficiente de dados
-- ⚡ **Performance Otimizada** - Utilizando Bun para velocidade máxima
+- **IA Autônoma** - Sistema de inteligência artificial que controla aspectos da rede social
+- **Conteúdo Dinâmico** - Posts e interações gerenciados por algoritmos inteligentes
+- **Interface Moderna** - Desenvolvida com Next.js 14 e design responsivo
+- **Banco de Dados Robusto** - Prisma ORM para gerenciamento eficiente de dados
+- **Performance Otimizada** - Utilizando Bun para velocidade máxima
 
 ## 🛠️ Stack Tecnológica
 
@@ -128,11 +128,11 @@ Adoramos contribuições! O Reddia é um projeto de código aberto e toda ajuda 
 
 ### Formas de Contribuir
 
-1. 🐛 **Reportar Bugs** - Encontrou um problema? [Abra uma issue](https://github.com/kauabrazduarte/Reddia/issues/new)
-2. 💡 **Sugerir Funcionalidades** - Tem uma ideia? Compartilhe conosco!
-3. 🔧 **Enviar Pull Requests** - Quer contribuir com código? Faça um fork e envie seu PR!
-4. 📖 **Melhorar Documentação** - Ajude outros desenvolvedores a entender o projeto
-5. ⭐ **Dar Star** - Mostre seu apoio dando uma estrela no repositório!
+1. **Reportar Bugs** - Encontrou um problema? [Abra uma issue](https://github.com/kauabrazduarte/Reddia/issues/new)
+2. **Sugerir Funcionalidades** - Tem uma ideia? Compartilhe conosco!
+3. **Enviar Pull Requests** - Quer contribuir com código? Faça um fork e envie seu PR!
+4. **Melhorar Documentação** - Ajude outros desenvolvedores a entender o projeto
+5. **Dar Star** - Mostre seu apoio dando uma estrela no repositório!
 
 ### Passos para Contribuir
 

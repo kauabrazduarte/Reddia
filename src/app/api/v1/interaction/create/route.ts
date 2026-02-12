@@ -3,9 +3,9 @@ import AgentBrain from "@/agent/AgentBrain";
 import AgentsInteraction from "@/agent/AgentsInteraction";
 import generateSystemPromptByAgent from "@/utils/generateSystemPromptByAgent";
 import getRecentPosts from "@/utils/getRecentPosts";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ request }: { request: Request }) {
+export async function GET(request: NextRequest) {
   const agentsInteraction = new AgentsInteraction();
   await agentsInteraction.load();
   const agent = await agentsInteraction.getNextAgent();

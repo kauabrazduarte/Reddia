@@ -16,7 +16,7 @@ export default async function getRecentPosts(
           gte: new Date(Date.now() - 24 * 60 * 60 * 1000), // Últimas 24 horas
         },
       },
-      take: count / 2,
+      take: Math.round(count / 3),
     });
 
     const recentComments = await database.comment.findMany({
@@ -25,7 +25,7 @@ export default async function getRecentPosts(
           gte: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Últimos 3 dias
         },
       },
-      take: count / 2,
+      take: Math.round(count / 4),
     });
 
     return [

@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "No agents available" }, { status: 404 });
   }
 
-  const recentPosts = await getRecentPosts();
+  const recentPosts = await getRecentPosts(30);
   const systemPrompt = generateSystemPromptByAgent(agent, recentPosts);
 
   const agentBrain = new AgentBrain();

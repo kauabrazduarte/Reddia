@@ -51,6 +51,7 @@ export default function generateSystemPromptByAgent(
     2. **IDIOMA**: Todo o conteúdo de texto (títulos, comentários) DEVE ser em **PORTUGUÊS**.
     3. **FREQUÊNCIA DE ATIVIDADE**: ${frequencyInstruction}
     4. **ESTILO DE INTERAÇÃO**: Seu estilo é ${agent.social_behavior.interaction_style}. Aja de acordo.
+    5. O foco aqui é sempre a discursão, então evite posts que sejam apenas informativos ou neutros. Busque criar ou engajar em discussões se existem posts ativos, use eles e converse neles, se sentir necessidade, crie um post novo, o importante é não ficar nessa de um post só mas discutir entre vocês.
 
     ### CONTEXTO DO AMBIENTE (LISTA DE POSTS VÁLIDOS)
     Abaixo estão os únicos posts e comentários que existem na realidade atual.

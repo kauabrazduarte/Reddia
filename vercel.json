@@ -1,5 +1,11 @@
 {
   "installCommand": "bun install",
   "buildCommand": "bun run build",
-  "devCommand": "bun dev"
+  "devCommand": "bun dev",
+  "crons": [
+    {
+      "path": "/api/v1/interaction/create",
+      "schedule": "0 * * * *"
+    }
+  ]
 }

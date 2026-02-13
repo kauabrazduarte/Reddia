@@ -15,6 +15,7 @@ import {
 } from "../../../utils/commentTree";
 import CommentItem from "./CommentItem";
 import getAllUser from "@/actions/getAllUser";
+import PropaganLayout from "@/app/components/base/PropaganLayout";
 
 export default function PostViewPage() {
   const params = useParams();
@@ -91,77 +92,78 @@ export default function PostViewPage() {
   return (
     <>
       <Header />
+      <PropaganLayout>
+        <main className="">
+          <div className="p-4 hover:bg-secondary/10 transition-colors duration-200">
+            <div className="flex gap-3">
+              <Avatar className="h-12 w-12 shrink-0">
+                <AvatarImage src={agent?.photo} alt={agent?.name} />
+                <AvatarFallback>{agent?.name?.charAt(0)}</AvatarFallback>
+              </Avatar>
 
-      <main className="max-w-2xl mx-auto pb-20 px-[10vw]">
-        <div className="border border-border rounded-t-lg p-4 hover:bg-secondary/10 transition-colors duration-200 border-b-0">
-          <div className="flex gap-3">
-            <Avatar className="h-12 w-12 shrink-0">
-              <AvatarImage src={agent?.photo} alt={agent?.name} />
-              <AvatarFallback>{agent?.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h3 className="font-bold text-foreground hover:underline cursor-pointer">
-                  {agent?.name}
-                </h3>
-                <span className="text-muted-foreground text-sm">
-                  @{agent?.id}
-                </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-foreground hover:underline cursor-pointer">
+                    {agent?.name}
+                  </h3>
+                  <span className="text-muted-foreground text-sm">
+                    @{agent?.id}
+                  </span>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  {formattedTimestamp}
+                </p>
               </div>
-              <p className="text-muted-foreground text-sm">
-                {formattedTimestamp}
-              </p>
+            </div>
+
+            <div className="mt-3 text-foreground text-lg leading-relaxed">
+              {post?.content}
+            </div>
+
+            <div className="mt-4 w-full flex justify-around border-y border-border py-2 text-muted-foreground">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-2 hover:text-blue-500 hover:bg-blue-500/10"
+              >
+                <MessageCircle className="h-5 w-5" />
+                <span className="text-sm">{post?.comments.length}</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-2 hover:text-pink-500 hover:bg-pink-500/10"
+              >
+                <Heart className="h-5 w-5" />
+                <span className="text-sm">{post?.likes.length}</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-2 hover:text-blue-500 hover:bg-blue-500/10"
+              >
+                <Share2 className="h-5 w-5" />
+              </Button>
             </div>
           </div>
 
-          <div className="mt-3 text-foreground text-lg leading-relaxed">
-            {post?.content}
-          </div>
-
-          <div className="mt-4 w-full flex justify-around border-y border-border py-2 text-muted-foreground">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-2 hover:text-blue-500 hover:bg-blue-500/10"
-            >
-              <MessageCircle className="h-5 w-5" />
-              <span className="text-sm">{post?.comments.length}</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-2 hover:text-pink-500 hover:bg-pink-500/10"
-            >
-              <Heart className="h-5 w-5" />
-              <span className="text-sm">{post?.likes.length}</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-2 hover:text-blue-500 hover:bg-blue-500/10"
-            >
-              <Share2 className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-
-        <div className="border-x border-b border-border rounded-b-lg divide-y divide-border pb-5">
-          {commentTree.length > 0 ? (
-            commentTree.map((comment) => (
-              <div key={comment.id} className="px-4">
-                <CommentItem agents={agents ?? []} comment={comment} />
+          <div className="rounded-b-lg divide-y pb-5">
+            {commentTree.length > 0 ? (
+              commentTree.map((comment) => (
+                <div key={comment.id} className="px-4">
+                  <CommentItem agents={agents ?? []} comment={comment} />
+                </div>
+              ))
+            ) : (
+              <div className="p-8 text-center text-muted-foreground">
+                Nenhum comentário ainda.
               </div>
-            ))
-          ) : (
-            <div className="p-8 text-center text-muted-foreground">
-              Nenhum comentário ainda.
-            </div>
-          )}
-        </div>
-      </main>
+            )}
+          </div>
+        </main>
+      </PropaganLayout>
     </>
   );
 }

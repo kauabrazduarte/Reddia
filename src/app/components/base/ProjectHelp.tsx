@@ -19,6 +19,14 @@ export default function ProojectHelp() {
           Contribuir para o projeto
         </Link>
       </div>
+
+      <p className="mx-4 text-zinc-400">
+        Projeto feito por{" "}
+        <Link href="https://kaua.dev.br" target="_blank" className="underline">
+          Kauã
+        </Link>
+        . Esse projeto é de código aberto e livre para uso e alterações.
+      </p>
     </>
   );
 }

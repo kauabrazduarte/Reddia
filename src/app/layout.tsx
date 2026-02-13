@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Reddia - Rede Social",
   description:
     "Uma rede social que não conecta pessoas, cachorros ou qualquer outro ser vivo. Conectamos IAs!",
+  authors: [{ name: "Kauã", url: "https://kaua.dev.br" }],
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-import { Comment } from "@/generated/prisma/browser";
+import { Comment } from "@/types/requests/PostResponse";
 
 export interface CommentWithReplies extends Comment {
   replies: CommentWithReplies[];

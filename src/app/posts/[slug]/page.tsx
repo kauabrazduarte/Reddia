@@ -6,22 +6,18 @@ import { Heart, MessageCircle, Share2 } from "lucide-react";
 import Header from "@/app/components/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import getPostBySlug, { PostWithComments } from "@/actions/getPostBySlug";
-import getUserById, { AgentProfile } from "@/actions/getUserById";
-
-import {
-  buildCommentTree,
-  CommentWithReplies,
-} from "../../../utils/commentTree";
+import { buildCommentTree } from "../../../utils/commentTree";
 import CommentItem from "./CommentItem";
-import getAllUser from "@/actions/getAllUser";
 import PropaganLayout from "@/app/components/base/PropaganLayout";
+import { AgentProfile } from "@/types/user";
+import { SlugPostResponse } from "@/types/requests/PostResponse";
+import getAllUser from "@/utils/getAllUser";
 
 export default function PostViewPage() {
   const params = useParams();
   const postSlug = params.slug;
 
-  const [post, setPost] = useState<PostWithComments | null>(null);
+  const [post, setPost] = useState<SlugPostResponse | null>(null);
   const [agent, setAgent] = useState<AgentProfile>();
   const [agents, setAgents] = useState<AgentProfile[]>();
   const [loading, setLoading] = useState(true);
@@ -34,8 +30,18 @@ export default function PostViewPage() {
           return;
         }
 
-        const postData = await getPostBySlug(postSlug.toString());
-        if (!postData) {
+        const getPostResponse = await fetch(
+          `/api/v1/posts/${postSlug.toString()}`,
+          {
+            cache: "no-cache",
+            next: {
+              revalidate: 60,
+            },
+          },
+        );
+        const getPostJson = (await getPostResponse.json()) as SlugPostResponse;
+
+        if (!getPostJson) {
           notFound();
           return;
         }
@@ -45,7 +51,7 @@ export default function PostViewPage() {
         setAgents(agentsData);
 
         const agentData = agentsData.find(
-          (agent) => agent.id === postData.authorId,
+          (agent) => agent.id === getPostJson.authorId,
         );
 
         if (!agentData) {
@@ -54,7 +60,7 @@ export default function PostViewPage() {
         }
 
         setAgent(agentData);
-        setPost(postData);
+        setPost(getPostJson);
       } catch (error) {
         console.error("Erro ao carregar post:", error);
       } finally {

@@ -1,10 +1,9 @@
-"use server";
-
 import path from "path";
 import fs from "fs/promises";
-import { AgentProfile } from "./getUserById";
+import { NextRequest, NextResponse } from "next/server";
+import { AgentProfile } from "@/types/user";
 
-export default async function getAllUser() {
+export async function GET(request: NextRequest) {
   const dirname = process.cwd();
   const agentsDirs = path.join(dirname, "agents");
 
@@ -22,9 +21,14 @@ export default async function getAllUser() {
       }
     }
 
-    return agents;
+    return NextResponse.json(agents);
   } catch (error) {
     console.error("Error reading agents directory:", error);
-    return [];
+    return NextResponse.json(
+      {
+        error: "Error reading agents directory",
+      },
+      { status: 500 },
+    );
   }
 }

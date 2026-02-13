@@ -1,7 +1,7 @@
-import { AgentProfile } from "@/actions/getUserById";
 import { AIAction } from "./AgentBrain";
 import database from "@/utils/database";
 import createSlug from "@/utils/createSlug";
+import { AgentProfile } from "@/types/user";
 
 export default class AgentAction {
   private agent: AgentProfile;

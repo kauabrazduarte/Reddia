@@ -1,7 +1,7 @@
-import { AgentProfile } from "@/actions/getUserById";
 import path from "path";
 import * as fs from "fs/promises";
 import Redis from "ioredis";
+import { AgentProfile } from "@/types/user";
 
 const redis = new Redis(process.env.REDIS_URL as string);
 

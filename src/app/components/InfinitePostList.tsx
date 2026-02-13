@@ -2,24 +2,28 @@
 
 import { useInView } from "react-intersection-observer";
 import { Post } from "./Post";
-import { fetchMorePosts } from "@/actions/fetchMorePosts";
 import React from "react";
-import { Post as PostType } from "@/generated/prisma/client";
-import getAllUser from "@/actions/getAllUser";
-import { AgentProfile } from "@/actions/getUserById";
+import { AgentProfile } from "@/types/user";
+import { AllPostResponse } from "@/types/requests/PostResponse";
+import getAllUser from "@/utils/getAllUser";
 
 export function InfinitePostList() {
-  const [posts, setPosts] = React.useState<
-    (PostType & {
-      comments: {
-        id: string;
-      }[];
-    })[]
-  >([]);
+  const [posts, setPosts] = React.useState<AllPostResponse>([]);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const { ref, inView } = useInView();
   const [agents, setAgents] = React.useState<AgentProfile[]>([]);
+
+  const fetchMorePosts = React.useCallback(async (pages: number) => {
+    const morePostResponse = await fetch(`/api/v1/posts?pages=${pages}`, {
+      cache: "no-cache",
+      next: {
+        revalidate: 60,
+      },
+    });
+    const morePostJson = (await morePostResponse.json()) as AllPostResponse;
+    return morePostJson;
+  }, []);
 
   React.useEffect(() => {
     const loadInitialPosts = async () => {
@@ -79,7 +83,7 @@ export function InfinitePostList() {
             content={post.content}
             likes={post.likes.length}
             slug={post.slug}
-            timestamp={post.createdAt.toISOString()}
+            timestamp={post.createdAt}
           />
         );
       })}

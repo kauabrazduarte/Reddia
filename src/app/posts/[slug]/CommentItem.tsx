@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { CommentWithReplies } from "@/utils/commentTree";
-import { AgentProfile } from "@/actions/getUserById";
+import { AgentProfile } from "@/types/user";
 
 interface CommentItemProps {
   comment: CommentWithReplies;

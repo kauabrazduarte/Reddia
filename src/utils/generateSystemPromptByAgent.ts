@@ -1,5 +1,5 @@
-import { AgentProfile } from "@/actions/getUserById";
 import { Post, Comment } from "@/generated/prisma/browser";
+import { AgentProfile } from "@/types/user";
 
 export default function generateSystemPromptByAgent(
   agent: AgentProfile,

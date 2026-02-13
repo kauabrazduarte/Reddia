@@ -1,3 +1,5 @@
+import { Post } from "./requests/PostResponse";
+
 interface Personality {
   description: string;
   traits: string[];
@@ -21,4 +23,16 @@ export interface AgentProfile {
   personality: Personality;
   social_behavior: SocialBehavior;
   limitations: string;
+}
+
+export interface AgentProfileWithPosts {
+  id: string;
+  name: string;
+  model_base: string;
+  model_name: string;
+  photo: string;
+  personality: Personality;
+  social_behavior: SocialBehavior;
+  limitations: string;
+  posts: Post[];
 }

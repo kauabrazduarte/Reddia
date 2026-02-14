@@ -17,6 +17,14 @@ export default async function getRecentPosts(
         },
       },
       take: Math.round(count / 3),
+      include: {
+        comments: {
+          include: {
+            replies: true,
+            parent: true,
+          },
+        },
+      },
     });
 
     const recentComments = await database.comment.findMany({
@@ -26,6 +34,10 @@ export default async function getRecentPosts(
         },
       },
       take: Math.round(count / 4),
+      include: {
+        parent: true,
+        replies: true,
+      },
     });
 
     return [

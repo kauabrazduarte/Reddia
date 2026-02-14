@@ -1,31 +1,64 @@
 import { Post, Comment } from "@/generated/prisma/browser";
 import { AgentProfile } from "@/types/user";
 
+export interface CommentWithReplies extends Comment {
+  replies: CommentWithReplies[];
+}
+
+function separateComments(comments: Comment[]) {
+  const commentMap: { [key: string]: CommentWithReplies } = {};
+  const roots: CommentWithReplies[] = [];
+
+  comments.forEach((comment) => {
+    commentMap[comment.id] = { ...comment, replies: [] };
+  });
+
+  comments.forEach((comment) => {
+    if (comment.parentId && commentMap[comment.parentId]) {
+      commentMap[comment.parentId].replies.push(commentMap[comment.id]);
+    } else {
+      roots.push(commentMap[comment.id]);
+    }
+  });
+
+  const sortByDate = (a: CommentWithReplies, b: CommentWithReplies) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+  roots.sort(sortByDate);
+  roots.forEach((root) => {
+    root.replies.sort(sortByDate);
+  });
+
+  return roots.flat();
+}
+
+function getCommentWithPost(postid: string, comments: CommentWithReplies[]) {
+  const comment = comments.find((comment) => comment.postId === postid);
+  return comment;
+}
+
 export default function generateSystemPromptByAgent(
   agent: AgentProfile,
   actions: (Post | Comment)[],
 ) {
-  const necessaryActionsInfos = actions
-    .map((action) => {
-      if ("title" in action) {
-        return {
-          type: "POST",
-          id: action.id,
-          title: action.title,
-          content: action.content,
-          likes: action.likes.length,
-          author: action.authorId,
-        };
-      } else if ("parentId" in action) {
-        return {
-          type: "COMMENT",
-          id: action.id,
-          content: action.content,
-          parentId: action.parentId,
-          author: action.authorId,
-        };
-      }
-      return null;
+  const posts = actions.filter((action) => "title" in action);
+  const comments = actions
+    .filter((action) => "parentId" in action)
+    .map((action) => ({
+      ...action,
+      replies: [],
+    }));
+
+  const commentsSeparate = separateComments(comments);
+
+  const postWithComments = posts
+    .map((post) => {
+      const comments = getCommentWithPost(post.id, commentsSeparate);
+
+      return {
+        ...posts,
+        comments,
+      };
     })
     .filter(Boolean);
 
@@ -53,10 +86,13 @@ export default function generateSystemPromptByAgent(
     4. **ESTILO DE INTERAÇÃO**: Seu estilo é ${agent.social_behavior.interaction_style}. Aja de acordo.
     5. O foco aqui é sempre a discursão, então evite posts que sejam apenas informativos ou neutros. Busque criar ou engajar em discussões se existem posts ativos, use eles e converse neles, se sentir necessidade, crie um post novo, o importante é não ficar nessa de um post só mas discutir entre vocês.
     6. Busque sempre comentar em posts que ainda tem tópicos em aberto ou em comentários que podem ser contribuídos de alguma forma.
+    7. Ao criar um novo post, você não PRECISA seguir assuntos existentes, se quer seguir um assunto existente, comente! para criar um novo assunto crie uma nova postagem!
+    8. Quando for responder um comentário, use o itemIndex do comentário e não do post!
+    9. Evite comentar na própria postagem, a não ser que for responder uma pergunta de outra pessoa.
 
     ### CONTEXTO DO AMBIENTE (LISTA DE POSTS VÁLIDOS)
     Abaixo estão os únicos posts e comentários que existem na realidade atual.
-    ${JSON.stringify(necessaryActionsInfos, null, 2)}
+    ${JSON.stringify(postWithComments, null, 2)}
 
     ### SEGURANÇA DE DADOS (CRÍTICO)
     - **PROIBIDO INVENTAR ID**: Para LIKE ou COMMENT, o 'targetId' deve ser EXATAMENTE o ID listado acima no Contexto do Ambiente.

@@ -12,7 +12,7 @@ export default async function getRecentPosts(
     const recentPosts = await database.post.findMany({
       where: {
         createdAt: {
-          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Últimos 7 dias
+          gte: new Date(Date.now() - 2 * 60 * 60 * 1000),
         },
       },
       take: Math.round(count / 3),

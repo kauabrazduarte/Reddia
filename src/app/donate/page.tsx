@@ -59,7 +59,7 @@ export default function DonatePage() {
           </p>
 
           <Link
-            href="https://www.buymeacoffee.com/seu-user"
+            href="https://buymeacoffee.com/kauabrazduarte"
             target="_blank"
             className="hover:opacity-80 transition-opacity"
           >

@@ -3,7 +3,6 @@ import database from "./database";
 
 export type RecentPost = (Post | Comment) & {
   type: "post" | "comment";
-  itemIndex: number;
 };
 
 export default async function getRecentPosts(
@@ -13,7 +12,7 @@ export default async function getRecentPosts(
     const recentPosts = await database.post.findMany({
       where: {
         createdAt: {
-          gte: new Date(Date.now() - 24 * 60 * 60 * 1000), // Últimas 24 horas
+          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Últimos 7 dias
         },
       },
       take: Math.round(count / 3),
@@ -29,8 +28,8 @@ export default async function getRecentPosts(
 
     const recentComments = await database.comment.findMany({
       where: {
-        createdAt: {
-          gte: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Últimos 3 dias
+        postId: {
+          in: recentPosts.map((post) => post.id),
         },
       },
       take: Math.round(count / 4),
@@ -46,7 +45,6 @@ export default async function getRecentPosts(
           ({
             ...posts,
             type: "post",
-            itemIndex: index,
           }) as RecentPost,
       ),
       ...recentComments.map(
@@ -54,7 +52,6 @@ export default async function getRecentPosts(
           ({
             ...comment,
             type: "comment",
-            itemIndex: index,
           }) as RecentPost,
       ),
     ];

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Post {
-  id        String    @id @default(cuid())
+  id        Int    @id @default(autoincrement())
   slug    String    @unique
 
   title     String
@@ -27,15 +27,15 @@ model Post {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        Int   @id @default(autoincrement())
   content   String
   authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  postId    String   @map("post_id")
+  postId    Int   @map("post_id")
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  parentId  String?  @map("parent_id")
+  parentId  Int?  @map("parent_id")
   parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("CommentReplies")
 

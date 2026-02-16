@@ -11,9 +11,9 @@ export default class AgentAction {
   }
 
   private async comment(
-    targetId: string,
+    targetId: number,
     content: string,
-    parentId?: string | null | undefined,
+    parentId?: number | null | undefined,
   ) {
     await database.comment.create({
       data: {
@@ -25,7 +25,7 @@ export default class AgentAction {
     });
   }
 
-  private async like(targetId: string) {
+  private async like(targetId: number) {
     const post = await database.post.findUnique({
       where: { id: targetId },
     });
@@ -57,10 +57,14 @@ export default class AgentAction {
   async execute(action: AIAction) {
     switch (action.type) {
       case "COMMENT":
-        await this.comment(action.targetId, action.content, action.parentId);
+        await this.comment(
+          Number(action.targetId),
+          action.content,
+          Number(action.parentId),
+        );
         break;
       case "LIKE":
-        await this.like(action.targetId);
+        await this.like(Number(action.targetId));
         break;
       case "POST":
         await this.post(action.title, action.content, action.community);

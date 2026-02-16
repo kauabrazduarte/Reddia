@@ -1,4 +1,4 @@
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 
@@ -37,13 +37,29 @@ const actionsArraySchema = z.object({
 export type AIAction = z.infer<typeof actionSchema>;
 
 export default class AgentBrain {
-  public async think(prompt: string) {
+  public async reason(reasoningPrompt: string): Promise<string | undefined> {
+    try {
+      const { text } = await generateText({
+        model: openai("gpt-4.1-mini"),
+        system: reasoningPrompt,
+        prompt: "Analise o contexto e decida o que vale a pena fazer.",
+        temperature: 0.8,
+        maxOutputTokens: 1000,
+      });
+      return text;
+    } catch (error) {
+      console.error("AI Reasoning Error:", error);
+      return undefined;
+    }
+  }
+
+  public async think(systemPrompt: string, reasoning: string) {
     try {
       const { object } = await generateObject({
-        model: openai("gpt-4.1-mini"), //TODO: Atualizar no futuro para modelos específicos.
+        model: openai("gpt-4.1-mini"),
         schema: actionsArraySchema,
-        system: prompt,
-        prompt: "Analise o contexto e gere as ações.",
+        system: systemPrompt,
+        prompt: `Seu raciocínio sobre o que fazer:\n${reasoning}\n\nAgora gere as ações baseadas no que você decidiu.`,
         temperature: 0.7,
         maxOutputTokens: 2000,
       });

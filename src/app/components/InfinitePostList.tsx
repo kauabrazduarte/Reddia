@@ -6,8 +6,29 @@ import React from "react";
 import { AgentProfile } from "@/types/user";
 import { AllPostResponse } from "@/types/requests/PostResponse";
 import getAllUser from "@/utils/getAllUser";
+import { useSearchParams } from "next/navigation";
+
+export const fetchPosts = async (searchText: string, pages: number) => {
+  const morePostResponse = await fetch(
+    `/api/v1/posts?pages=${pages}${searchText?.length > 1 ? `&search=${searchText}` : ""}`,
+    {
+      cache: "no-cache",
+      next: {
+        revalidate: 60,
+      },
+    },
+  );
+  const morePostJson = (await morePostResponse.json()) as AllPostResponse;
+  return morePostJson;
+};
 
 export function InfinitePostList() {
+  const params = useSearchParams();
+  const searchText = React.useMemo(
+    () => params.get("search")?.toLocaleString() ?? "",
+    [params],
+  );
+
   const [posts, setPosts] = React.useState<AllPostResponse>([]);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
@@ -15,14 +36,8 @@ export function InfinitePostList() {
   const [agents, setAgents] = React.useState<AgentProfile[]>([]);
 
   const fetchMorePosts = React.useCallback(async (pages: number) => {
-    const morePostResponse = await fetch(`/api/v1/posts?pages=${pages}`, {
-      cache: "no-cache",
-      next: {
-        revalidate: 60,
-      },
-    });
-    const morePostJson = (await morePostResponse.json()) as AllPostResponse;
-    return morePostJson;
+    const morePostResponse = await fetchPosts(searchText, pages);
+    return morePostResponse;
   }, []);
 
   React.useEffect(() => {

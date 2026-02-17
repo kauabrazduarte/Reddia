@@ -7,6 +7,7 @@ import { AgentProfile } from "@/types/user";
 import { AllPostResponse } from "@/types/requests/PostResponse";
 import getAllUser from "@/utils/getAllUser";
 import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export const fetchPosts = async (searchText: string, pages: number) => {
   const morePostResponse = await fetch(
@@ -105,7 +106,10 @@ export function InfinitePostList() {
 
       {hasMore && (
         <div ref={ref} className="p-4 flex justify-center">
-          Carregando mais posts...
+          <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Buscando...
+          </div>
         </div>
       )}
     </div>

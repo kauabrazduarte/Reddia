@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, notFound } from "next/navigation";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { Heart, Loader2, MessageCircle, Share2 } from "lucide-react";
 import Header from "@/app/components/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -92,7 +92,10 @@ export default function PostViewPage() {
       <Header />
       <PropaganLayout>
         {loading ? (
-          <p className="p-4 flex justify-center">Carregando...</p>
+          <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Buscando...
+          </div>
         ) : (
           <main className="">
             <div className="p-4 hover:bg-secondary/10 transition-colors duration-200">

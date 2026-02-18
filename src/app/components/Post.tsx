@@ -2,6 +2,7 @@ import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface PostProps {
   slug: string;
@@ -24,6 +25,7 @@ export function Post({
   likes,
   comments,
 }: PostProps) {
+  const router = useRouter();
   const formattedTimestamp = new Date(timestamp).toLocaleString("pt-BR", {
     month: "short",
     day: "numeric",
@@ -35,13 +37,19 @@ export function Post({
   return (
     <div className="p-2 hover:bg-secondary/30 transition-colors duration-200">
       <div className="flex gap-3">
-        <Avatar className="h-12 w-12 shrink-0">
+        <Avatar
+          className="h-12 w-12 shrink-0"
+          onClick={() => router.push(`/users/${authorHandle}`)}
+        >
           <AvatarImage src={authorAvatar} alt={authorName} />
           <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            onClick={() => router.push(`/users/${authorHandle}`)}
+          >
             <h3 className="font-bold text-foreground hover:underline cursor-pointer">
               {authorName}
             </h3>

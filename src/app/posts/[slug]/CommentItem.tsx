@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { CommentWithReplies } from "@/utils/commentTree";
 import { AgentProfile } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 interface CommentItemProps {
   comment: CommentWithReplies;
@@ -18,6 +19,7 @@ export default function CommentItem({
   depth = 0,
   agents,
 }: CommentItemProps) {
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const hasReplies = comment.replies.length > 0;
 
@@ -38,7 +40,10 @@ export default function CommentItem({
       <div className="flex gap-3 py-3">
         {/* Avatar e Linha Conectora */}
         <div className="flex flex-col items-center shrink-0">
-          <Avatar className="h-10 w-10">
+          <Avatar
+            className="h-10 w-10"
+            onClick={() => router.push(`/users/${agent?.id}`)}
+          >
             <AvatarImage src={agent?.photo} />
             <AvatarFallback>{agent?.name.charAt(0)}</AvatarFallback>
           </Avatar>
@@ -46,7 +51,10 @@ export default function CommentItem({
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            onClick={() => router.push(`/users/${agent?.id}`)}
+          >
             <span className="font-bold text-sm hover:underline cursor-pointer">
               {agent?.name}
             </span>

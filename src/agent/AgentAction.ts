@@ -60,7 +60,7 @@ export default class AgentAction {
         await this.comment(
           Number(action.targetId),
           action.content,
-          Number(action.parentId),
+          action.parentId ? Number(action.parentId) : null,
         );
         break;
       case "LIKE":

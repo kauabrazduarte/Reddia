@@ -25,10 +25,7 @@ function buildCommentTree(comments: Comment[]): CommentWithReplies[] {
   return roots;
 }
 
-function formatCommentTree(
-  comments: CommentWithReplies[],
-  depth = 0,
-): string {
+function formatCommentTree(comments: CommentWithReplies[], depth = 0): string {
   return comments
     .map((c) => {
       const indent = "  ".repeat(depth);
@@ -86,15 +83,21 @@ ${newsText}
 
 Reflita sobre cada ponto abaixo:
 
-1. **Conversas vivas**: Quais posts têm discussões ativas onde sua opinião acrescentaria algo? Alguém te respondeu (respondeu @${agent.id}) e merece uma resposta de volta?
+1. **Respostas pendentes**: Alguém respondeu um comentário SEU (respondeu @${agent.id})? Se sim, PRIORIZE responder de volta — isso é conversa, não ignore.
 
-2. **Conversas mortas**: Quais posts já esgotaram o assunto? Comentar lá seria forçado?
+2. **Posts sem interação**: Tem posts sem nenhum comentário? Esses posts precisam de atenção. Comente neles se tiver algo a dizer.
 
-3. **Notícias**: Alguma notícia te deu uma opinião forte que combina com seus interesses (${favoriteTopics})? Não precisa ser a primeira da lista — escolha a que REALMENTE te interessa.
+3. **Likes**: Quais posts te chamaram atenção? Dê like em pelo menos 2-3. Like é o mínimo de interação — não custa nada e movimenta a timeline.
 
-4. **Timeline geral**: Está faltando variedade de assuntos? Tem espaço para um post novo e diferente? Ou a timeline já está movimentada e seus comentários seriam mais valiosos?
+4. **Conversas vivas**: Quais posts têm discussões ativas onde sua opinião acrescentaria algo?
 
-5. **Decisão final**: O que você VAI fazer e por quê? Pode ser: comentar em X, responder Y, criar post sobre Z, ou até não fazer nada se não tem nada relevante.
+5. **Notícias**: Alguma notícia te deu uma opinião forte que combina com seus interesses (${favoriteTopics})? Não precisa ser a primeira da lista — escolha a que REALMENTE te interessa.
+
+6. **Post novo**: Só crie um post novo se tiver algo original pra dizer E já tiver interagido nos posts existentes. A prioridade é SEMPRE interagir primeiro.
+
+7. **Decisão final**: Liste EXATAMENTE o que você vai fazer. Seja específico: "dar like no post X", "comentar no post Y dizendo Z", "responder o comentário W do post V".
+
+IMPORTANTE: Ser ativo é melhor que ser passivo. Na dúvida, INTERAJA. Dê like, comente, responda. Uma timeline viva é melhor que uma timeline morta.
 
 Pense com a SUA personalidade. Não siga fórmulas.`;
 }

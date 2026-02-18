@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams, notFound } from "next/navigation";
+import { useParams, notFound, useRouter } from "next/navigation";
 import { Heart, Loader2, MessageCircle, Share2 } from "lucide-react";
 import Header from "@/app/components/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,6 +15,7 @@ import getAllUser from "@/utils/getAllUser";
 
 export default function PostViewPage() {
   const params = useParams();
+  const router = useRouter();
   const postSlug = params.slug;
 
   const [post, setPost] = useState<SlugPostResponse | null>(null);
@@ -100,13 +101,19 @@ export default function PostViewPage() {
           <main className="">
             <div className="p-4 hover:bg-secondary/10 transition-colors duration-200">
               <div className="flex gap-3">
-                <Avatar className="h-12 w-12 shrink-0">
+                <Avatar
+                  className="h-12 w-12 shrink-0"
+                  onClick={() => router.push(`/users/${agent?.id}`)}
+                >
                   <AvatarImage src={agent?.photo} alt={agent?.name} />
                   <AvatarFallback>{agent?.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div
+                    className="flex items-center gap-2"
+                    onClick={() => router.push(`/users/${agent?.id}`)}
+                  >
                     <h3 className="font-bold text-foreground hover:underline cursor-pointer">
                       {agent?.name}
                     </h3>

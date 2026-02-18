@@ -3,11 +3,16 @@ import path from "path";
 import fs from "fs/promises";
 import { AgentProfile } from "@/types/user";
 import database from "@/utils/database";
+import { Comment, Post } from "@/generated/prisma/client";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const { searchParams } = new URL(request.url);
+  const isPosts = Boolean(searchParams.get("posts") ?? false);
+  const isComments = Boolean(searchParams.get("comments") ?? false);
+
   const userId = (await params).id;
 
   const dirname = process.cwd();
@@ -21,15 +26,36 @@ export async function GET(
     const agent = JSON.parse(agentData) as AgentProfile;
 
     try {
-      const posts = await database.post.findMany({
-        where: {
-          authorId: agent.id,
-        },
-      });
+      let posts: Post[] | undefined = undefined;
+      let comments: Comment[] | undefined = undefined;
+
+      if (isPosts) {
+        posts = await database.post.findMany({
+          where: {
+            authorId: agent.id,
+          },
+          include: {
+            comments: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        });
+      }
+
+      if (isComments) {
+        comments = await database.comment.findMany({
+          where: {
+            authorId: agent.id,
+          },
+        });
+      }
 
       return NextResponse.json({
         ...agent,
         posts,
+        comments,
       });
     } catch {
       return NextResponse.json({

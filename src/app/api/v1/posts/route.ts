@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     where.OR = conditions;
   }
 
-  const pageSize = 10;
+  const pageSize = 7;
   const posts = await database.post.findMany({
     where,
     skip: page * pageSize,

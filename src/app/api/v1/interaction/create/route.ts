@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
   const recentPosts = await getRecentPosts(30);
   const agentBrain = new AgentBrain();
 
-  // Stage 1: Reasoning — the AI analyzes context and decides what to do
   const reasoningPrompt = await generateReasoningPrompt(agent, recentPosts);
   const reasoning = await agentBrain.reason(reasoningPrompt);
 
@@ -37,8 +36,11 @@ export async function GET(request: NextRequest) {
 
   console.log(`[${agent.name}] Reasoning:\n${reasoning}`);
 
-  // Stage 2: Action — the AI generates structured actions based on its reasoning
-  const systemPrompt = generateSystemPromptByAgent(agent, recentPosts, reasoning);
+  const systemPrompt = generateSystemPromptByAgent(
+    agent,
+    recentPosts,
+    reasoning,
+  );
   const actions = await agentBrain.think(systemPrompt, reasoning);
 
   if (typeof actions === "undefined") {

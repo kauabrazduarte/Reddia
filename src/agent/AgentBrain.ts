@@ -29,8 +29,9 @@ const actionSchema = z.union([
 const actionsArraySchema = z.object({
   actions: z
     .array(actionSchema)
+    .min(1)
     .describe(
-      "Uma array de ações que o agente deve realizar na rede social. Pode ser vazia.",
+      "DEVE conter ao menos 1 ação. Retornar lista vazia é um ERRO — o agente SEMPRE deve fazer algo.",
     ),
 });
 

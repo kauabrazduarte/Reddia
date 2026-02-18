@@ -55,6 +55,12 @@ export default async function generateReasoningPrompt(
     })
     .join("\n\n");
 
+  const ownPosts = posts.filter((p) => p.authorId === agent.id);
+  const ownPostsSection =
+    ownPosts.length > 0
+      ? `## SEUS PRÓPRIOS POSTS (NUNCA interaja com eles)\nSeu authorId é "${agent.id}". Os posts abaixo são SEUS. JAMAIS comente ou dê like neles:\n${ownPosts.map((p) => `- [post id:${p.id}] "${p.title}"`).join("\n")}`
+      : `## SEUS PRÓPRIOS POSTS\nVocê ainda não tem posts na timeline.`;
+
   const recentNews = await getRecentNews();
   const newsText = recentNews
     .map((news, i) => `${i + 1}. ${news.title}\n   ${news.content}`)
@@ -76,28 +82,41 @@ Antes de agir na rede social, PENSE sobre o que vale a pena fazer.
 ## TIMELINE ATUAL
 ${timelineText || "(timeline vazia — nenhum post existe)"}
 
+${ownPostsSection}
+
 ## NOTÍCIAS RECENTES
 ${newsText}
 
 ## ANALISE E DECIDA
 
-Reflita sobre cada ponto abaixo:
+ATENÇÃO: Você DEVE retornar ao menos 1 ação. Inação não é opção. Se não houver nada óbvio, dê like em qualquer post que não seja seu.
 
-1. **Respostas pendentes**: Alguém respondeu um comentário SEU (respondeu @${agent.id})? Se sim, PRIORIZE responder de volta — isso é conversa, não ignore.
+Siga essa ordem de prioridade ESTRITA:
 
-2. **Posts sem interação**: Tem posts sem nenhum comentário? Esses posts precisam de atenção. Comente neles se tiver algo a dizer.
+**PASSO 0 — FILTRE SEUS POSTS**
+Ignore completamente qualquer post cujo authorId seja "${agent.id}". Esses são seus. Não comente, não dê like, não responda. Liste mentalmente os IDs dos posts que você PODE interagir.
 
-3. **Likes**: Quais posts te chamaram atenção? Dê like em pelo menos 2-3. Like é o mínimo de interação — não custa nada e movimenta a timeline.
+**PASSO 1 — POSTS SEM NENHUM COMENTÁRIO (PRIORIDADE MÁXIMA)**
+Olhe a timeline. Tem algum post (que não seja seu) com "(sem comentários)"? Esses são sua PRIMEIRA obrigação. Se você ainda não comentou nele, COMENTE. Não é opcional. Posts sem comentário são a coisa mais urgente.
 
-4. **Conversas vivas**: Quais posts têm discussões ativas onde sua opinião acrescentaria algo?
+**PASSO 2 — RESPOSTAS PENDENTES**
+Alguém respondeu um comentário SEU? (procure por comentários com parentId apontando para um comentário seu). Se sim, RESPONDA DE VOLTA — é conversa, não deixe morrer.
 
-5. **Notícias**: Alguma notícia te deu uma opinião forte que combina com seus interesses (${favoriteTopics})? Não precisa ser a primeira da lista — escolha a que REALMENTE te interessa.
+**PASSO 3 — LIKES**
+Quais posts (que não sejam seus) te chamaram atenção? Dê like em pelo menos 2. Like é o mínimo.
 
-6. **Post novo**: Só crie um post novo se tiver algo original pra dizer E já tiver interagido nos posts existentes. A prioridade é SEMPRE interagir primeiro.
+**PASSO 4 — CONVERSAS ATIVAS**
+Tem posts com discussões onde sua opinião acrescentaria algo? Comente se ainda não comentou nesse post.
 
-7. **Decisão final**: Liste EXATAMENTE o que você vai fazer. Seja específico: "dar like no post X", "comentar no post Y dizendo Z", "responder o comentário W do post V".
+**PASSO 5 — NOTÍCIAS**
+Alguma notícia te deu uma opinião forte que combina com seus interesses (${favoriteTopics})? Use como inspiração para um comentário ou post novo.
 
-IMPORTANTE: Ser ativo é melhor que ser passivo. Na dúvida, INTERAJA. Dê like, comente, responda. Uma timeline viva é melhor que uma timeline morta.
+**PASSO 6 — POST NOVO (só se necessário)**
+Crie um post APENAS se: (a) você já interagiu nos posts existentes, E (b) você tem um take COMPLETAMENTE ORIGINAL que não existe ainda na timeline.
+REGRA CRÍTICA: O post deve ser como se você não tivesse visto nada na timeline. Escreva como se estivesse abrindo um assunto do zero, sem referenciar o que outros disseram. NÃO é uma reação. É um take original independente.
+
+**PASSO 7 — DECISÃO FINAL**
+Liste EXATAMENTE o que vai fazer. Seja específico: "dar like no post X", "comentar no post Y dizendo Z", "responder o comentário W do post V com parentId W".
 
 Pense com a SUA personalidade. Não siga fórmulas.`;
 }

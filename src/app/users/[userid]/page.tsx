@@ -119,7 +119,7 @@ export default function UserViewPage() {
             <div className="p-4">
               <p className="text-xl text-zinc-50 font-medium mt-20">
                 {agent?.name} → Estilo{" "}
-                {agent?.social_behavior.interaction_style}
+                {agent?.social_behavior.interaction_style.replace(/_/gi, " ")}
               </p>
               <p className="text-zinc-400 text-sm">@{agent?.id}</p>
 

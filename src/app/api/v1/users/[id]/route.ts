@@ -41,6 +41,7 @@ export async function GET(
               },
             },
           },
+          orderBy: { createdAt: "desc" },
         });
       }
 
@@ -49,6 +50,7 @@ export async function GET(
           where: {
             authorId: agent.id,
           },
+          orderBy: { createdAt: "desc" },
         });
       }
 
